@@ -71,27 +71,31 @@ class PubMedScraper:
 
         # click search button
         self.driver.find_element(By.XPATH, '//*[@id="search-form"]/div/div[1]/div/button').click()
-        WebDriverWait(self.driver, 10).until(lambda x: x.find_element(By.XPATH, '//*[@id="search-results"]'))
+        WebDriverWait(self.driver, 30).until(lambda x: x.find_element(By.XPATH, '//*[@id="search-results"]'))
 
-        for it_page in range(pages):
-            print(it_page)
+        for it_page in range(1, pages + 1, 1):
+            print('seraching page ' + str(it_page))
 
-            for it_article in range(11):
+            for it_article in range(1, 11, 1):
                 try:
-                    item = self.driver.find_element(By.XPATH, '//*[@id="search-results"]/section[1]/div[1]/div/article[' + str(it_article + 1) + ']/div[2]/div[1]').text
+                    item = self.driver.find_element(By.XPATH, '//*[@id="search-results"]/section[1]/div[1]/div/article[' + str(it_article) + ']/div[2]/div[1]').text
                     self.papers_titles.append(copy.copy(item).split("\n"))
 
                 except:
                     pass
 
-            self.driver.find_element(By.XPATH, '//*[@id="search-results"]/div[6]/button[3]').click()
-            WebDriverWait(self.driver, 10).until(lambda x: x.find_element(By.XPATH, '//*[@id="search-results"]'))
+            try:
+                self.driver.find_element(By.XPATH, '//*[@id="search-results"]/div[6]/button[3]').click()
+                WebDriverWait(self.driver, 10).until(lambda x: x.find_element(By.XPATH, '//*[@id="search-results"]'))
+
+            except:
+                pass
 
     def search_all_keywords(self, vet_keywords):
         for keyword in vet_keywords:
-            self.search_pubmed(keyword, 2)
+            print(keyword)
+            self.search_pubmed(keyword, 3)
 
-        print(self.papers_titles[0])
         # delete duplicates
 
     # download url items to temp directory
